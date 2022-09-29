@@ -1,10 +1,14 @@
+import time
+start_time = time.time()
 import ifcopenshell
 import pandas
 
+
+# Abertura de ficheiro IFC
 ifc_file = ifcopenshell.open('20160125WestRiverSide Hospital-Ifc2x3-Autodesk_Hospital_Metric_Structural_2015.ifc')
 
 
-
+# Query do
 columns = ifc_file.by_type('IfcColumn')
 
 # print(columns[0].IsDefinedBy)
@@ -36,5 +40,15 @@ data = pandas.DataFrame({
     "Volume":volumes
 })
 
+print(data.sum())
+print(data.describe())
 print(data.head())
+
+
+
+with pandas.ExcelWriter('output.xlsx') as writer:
+
+    data.to_excel(writer, sheet_name='folha1')
+
+print("--- %s seconds ---" % (time.time() - start_time))
 
